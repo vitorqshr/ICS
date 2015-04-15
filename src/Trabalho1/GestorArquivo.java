@@ -5,12 +5,14 @@ import java.io.File;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
+import javax.sound.midi.Track;
 
 public class GestorArquivo {
 	private String caminhoArquivo;
 	private File arquivo;
 	private Sequence sequencia;
 	private Sequencer sequenciador;
+	private Track[] trilhas;
 	
 	public GestorArquivo(String nome) throws Exception{
 		pegaSequencia(nome);
@@ -20,8 +22,9 @@ public class GestorArquivo {
 		if(nome == null || nome.trim() == ""){
 			throw new RuntimeException("Erro ao abrir o arquivo!!");
 		}
-		caminhoArquivo = nome;
-		caminhoArquivo.concat(".midi");
+		caminhoArquivo = "./midis/";
+		caminhoArquivo = caminhoArquivo.concat(nome);
+		caminhoArquivo = caminhoArquivo.concat(".mid");
 		arquivo = new File(caminhoArquivo);
 	}
 	
@@ -31,6 +34,7 @@ public class GestorArquivo {
 		sequenciador = MidiSystem.getSequencer();
 		sequenciador.setSequence(sequencia);
 		sequenciador.open();
+		trilhas = sequencia.getTracks();
 	}
 	
 	public String pegaTempoTotal(){
@@ -59,11 +63,24 @@ public class GestorArquivo {
 		return tempoTotal;
 	}
 	
+	public double getDuracaoTique(){
+		long microsegundos = sequencia.getMicrosecondLength();
+		long segundos = microsegundos/1000000;
+		long  tiques    = sequencia.getTickLength();
+		return segundos/tiques;
+	}
+	
+	
+	
 	public Sequence getSequencia(){
 		return sequencia;
 	}
 	
 	public Sequencer getSequenciador(){
 		return sequenciador;
+	}
+	
+	public long getQntTrilhas(){
+		return trilhas.length;
 	}
 }
