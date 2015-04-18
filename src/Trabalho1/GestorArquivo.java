@@ -3,6 +3,7 @@ package Trabalho1;
 import java.io.File;
 
 import javax.sound.midi.MidiSystem;
+import javax.sound.midi.Receiver;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import javax.sound.midi.Track;
@@ -37,9 +38,13 @@ public class GestorArquivo {
 		trilhas = sequencia.getTracks();
 	}
 	
-	public String pegaTempoTotal(){
+	public long getSegundos(){
 		long microsegundos = sequencia.getMicrosecondLength();
-		long segundos = microsegundos/1000000;
+		return microsegundos/1000000;
+	}
+	
+	public String getTempoTotal(){
+		long segundos = getSegundos();
 		long horas = (long) Math.floor(segundos/3600);
 		segundos = segundos - 3600*horas;
 		long minutos = (long) Math.floor(segundos/60);
@@ -70,7 +75,9 @@ public class GestorArquivo {
 		return segundos/tiques;
 	}
 	
-	
+	public Receiver getReceptor(){
+		return sequenciador.getTransmitters().iterator().next().getReceiver();
+	}
 	
 	public Sequence getSequencia(){
 		return sequencia;

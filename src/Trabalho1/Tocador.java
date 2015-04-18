@@ -1,11 +1,20 @@
 package Trabalho1;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MetaMessage;
+import javax.sound.midi.MidiMessage;
+import javax.sound.midi.Receiver;
 import javax.sound.midi.Sequencer;
+import javax.sound.midi.ShortMessage;
+import javax.sound.midi.Track;
 
 public class Tocador {
 	private Sequencer sequenciador;
 	private String caminhoArquivo;
 	private GestorArquivo gestor;
+	private Receiver receptor;
+	static final int MENSAGEM_TONALIDADE = 0x59;  
+	 static final int FORMULA_DE_COMPASSO = 0x58;
 	
 	Tocador(String nome) throws Exception{
 		initGestor(nome);
@@ -45,20 +54,172 @@ public class Tocador {
 		tocar();
 	}
 	
-//	public static void main(String[] args) {
-//		try {
-//			Tocador tocador = new Tocador("atrain");
-//			long tempoini = System.currentTimeMillis();
-//			long diftime = System.currentTimeMillis() - tempoini;
-//			while(diftime < 10000){
-//				tocador.tocar();
-//				diftime = System.currentTimeMillis() - tempoini;
-//			}
-//			tocador.sair();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		
-//	}
+	public void mudaVolume(int volume) throws Exception{
+		volume = Math.round((volume*127)/100);
+		receptor = gestor.getReceptor();
+		gestor.getSequenciador().getTransmitter().setReceiver(receptor);
+		ShortMessage volumeMesage = new ShortMessage();
+		for (int i = 0; i < gestor.getQntTrilhas(); i++) {
+			volumeMesage.setMessage(ShortMessage.CONTROL_CHANGE,i,7,volume);
+			receptor.send(volumeMesage, -1);
+		}
+	}
+	
+	public long getTempo(){
+		if(gestor.getSequenciador() == null){
+			return -1;
+		}
+		return gestor.getSequenciador().getMicrosecondPosition();
+	}
+	
+	public long getSegundos(){
+		return gestor.getSegundos();
+	}
+	
+	
+	public void mudarPosicao(int horas, int minutos, int segundos){
+		double pos = ((horas*3600) + (minutos*60) + segundos)/(gestor.getDuracaoTique());
+		gestor.getSequenciador().setTickPosition((long) pos);
+		tocar();
+	}
+	
+	public void atraso(int ms){
+		try {
+			Thread.sleep(ms);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+
+	
+	   static Par getFormulaDeCompasso(Track trilha)
+	    {   int p=1;
+	        int q=1;
+
+	        for(int i=0; i<trilha.size(); i++)
+	        {
+	          MidiMessage m = trilha.get(i).getMessage();
+	          if(m instanceof MetaMessage) 
+	          {
+	            if(((MetaMessage)m).getType()==FORMULA_DE_COMPASSO)
+	            {
+	                MetaMessage mm = (MetaMessage)m;
+	                byte[] data = mm.getData();
+	                p = data[0];
+	                q = data[1];
+	                return new Par(p,q);
+	            }
+	          }
+	        }
+	        return new Par(p,q);
+	    }          
+	    
+	    
+	    
+	    static private class Par
+	    { int x, y;
+	      
+	      Par (int x_, int y_)  
+	      { this.x = x_;
+	        this.y = y_;          
+	      }
+	    
+	      int getX()
+	      { return x;
+	      }
+	      
+	      int getY()
+	      { return y;
+	      }
+	    
+	    }
+	
+
+	    
+	    static String getTonalidade(Track trilha) throws InvalidMidiDataException
+	    {       
+	       String stonalidade = "";
+	       for(int i=0; i<trilha.size(); i++)
+	       { MidiMessage m = trilha.get(i).getMessage();
+	       
+	              
+	       if(((MetaMessage)m).getType() == MENSAGEM_TONALIDADE)    
+	       {
+	            MetaMessage mm        = (MetaMessage)m;
+	            byte[]     data       = mm.getData();
+	            byte       tonalidade = data[0];
+	            byte       maior      = data[1];
+
+	            String       smaior = "Maior";
+	            if(maior==1) smaior = "Menor";
+
+	            if(smaior.equalsIgnoreCase("Maior"))
+	            {
+	                switch (tonalidade)
+	                {
+	                    case -7: stonalidade = "Dób Maior"; break;
+	                    case -6: stonalidade = "Solb Maior"; break;
+	                    case -5: stonalidade = "Réb Maior"; break;
+	                    case -4: stonalidade = "Láb Maior"; break;
+	                    case -3: stonalidade = "Mib Maior"; break;
+	                    case -2: stonalidade = "Sib Maior"; break;
+	                    case -1: stonalidade = "Fá Maior"; break;
+	                    case  0: stonalidade = "Dó Maior"; break;
+	                    case  1: stonalidade = "Sol Maior"; break;
+	                    case  2: stonalidade = "Ré Maior"; break;
+	                    case  3: stonalidade = "Lá Maior"; break;
+	                    case  4: stonalidade = "Mi Maior"; break;
+	                    case  5: stonalidade = "Si Maior"; break;
+	                    case  6: stonalidade = "Fá# Maior"; break;
+	                    case  7: stonalidade = "Dó# Maior"; break;
+	                }
+	            }
+
+	            else if(smaior.equalsIgnoreCase("Menor"))
+	            {
+	                switch (tonalidade)
+	                {
+	                    case -7: stonalidade = "Láb Menor"; break;
+	                    case -6: stonalidade = "Mib Menor"; break;
+	                    case -5: stonalidade = "Sib Menor"; break;
+	                    case -4: stonalidade = "Fá Menor"; break;
+	                    case -3: stonalidade = "Dó Menor"; break;
+	                    case -2: stonalidade = "Sol Menor"; break;
+	                    case -1: stonalidade = "Ré Menor"; break;
+	                    case  0: stonalidade = "Lá Menor"; break;
+	                    case  1: stonalidade = "Mi Menor"; break;
+	                    case  2: stonalidade = "Si Menor"; break;
+	                    case  3: stonalidade = "Fá# Menor"; break;
+	                    case  4: stonalidade = "Dó# Menor"; break;
+	                    case  5: stonalidade = "Sol# Menor"; break;
+	                    case  6: stonalidade = "Ré# Menor"; break;
+	                    case  7: stonalidade = "Lá# Menor"; break;
+	                }
+	            }
+	         }
+	      }
+	      return stonalidade;
+	    }
+	    
+		public static void main(String[] args) {
+			try {
+				Tocador tocador = new Tocador("atrain");
+				long tempoini = System.currentTimeMillis();
+				long diftime = System.currentTimeMillis() - tempoini;
+				while(diftime < 10000){
+					int volume = (int) (diftime/100);
+					System.out.println(volume);
+					tocador.mudaVolume(1);
+					tocador.tocar();
+					diftime = System.currentTimeMillis() - tempoini;
+				}
+				tocador.sair();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
 
 }
