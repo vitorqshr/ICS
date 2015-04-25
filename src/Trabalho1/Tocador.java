@@ -55,13 +55,12 @@ public class Tocador {
 	}
 	
 	public void mudaVolume(int volume) throws Exception{
-		volume = Math.round((volume*127)/100);
-		receptor = gestor.getReceptor();
-		gestor.getSequenciador().getTransmitter().setReceiver(receptor);
+//		receptor = gestor.getReceptor();
+//		gestor.getSequenciador().getTransmitter().setReceiver(receptor);
 		ShortMessage volumeMesage = new ShortMessage();
-		for (int i = 0; i < gestor.getQntTrilhas(); i++) {
+		for (int i = 0; i < 16; i++) {
 			volumeMesage.setMessage(ShortMessage.CONTROL_CHANGE,i,7,volume);
-			receptor.send(volumeMesage, -1);
+			gestor.getReceptor().send(volumeMesage, -1);
 		}
 	}
 	
@@ -208,11 +207,12 @@ public class Tocador {
 				Tocador tocador = new Tocador("atrain");
 				long tempoini = System.currentTimeMillis();
 				long diftime = System.currentTimeMillis() - tempoini;
+				tocador.tocar();
 				while(diftime < 10000){
 					int volume = (int) (diftime/100);
 					System.out.println(volume);
-					tocador.mudaVolume(1);
-					tocador.tocar();
+					tocador.mudaVolume(volume);
+					//tocador.tocar();
 					diftime = System.currentTimeMillis() - tempoini;
 				}
 				tocador.sair();
