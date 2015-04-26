@@ -1,22 +1,31 @@
 package Trabalho1;
 
+import java.awt.Dimension;
 import java.awt.EventQueue;
-
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
-import java.awt.*;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
-import java.text.DecimalFormat;
-
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.event.ChangeListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.text.DecimalFormat;
+
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JProgressBar;
+import javax.swing.JSlider;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class GUI {
 	
@@ -335,8 +344,18 @@ public class GUI {
 		progressBar.setString("00:00:00");
 		progressBar.setMaximum((int)tocador.getSegundos());
 		playBtn.setEnabled(true);
-		pauseBtn.setEnabled(true);
-		stopBtn.setEnabled(true);
+		pauseBtn.setEnabled(false);
+		stopBtn.setEnabled(false);
+		try {
+			tocador.mudaVolume(sliderVolume.getValue());
+			setArmTon(tocador.getGestor().getTonalidade());
+			Dimension d = tocador.getGestor().getFormulaDeCompasso();
+			setFormCompass((int)d.getWidth()+"/"+(int)d.getHeight()); 
+			setMetro("1/" + (int)d.getHeight());
+			setAndamento(tocador.getGestor().getAndamento());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void tocar(){
@@ -392,9 +411,13 @@ public class GUI {
 	}
 	
 	public void atualizaProgresso(){
+		
 		progressBar.setValue((int) (tocador.getTempo()/1000000));
 		DecimalFormat df = new DecimalFormat("00");
 		progressBar.setString(df.format( Math.round(( ((float)tocador.getTempo())/1000000 ) / 3600)) + ":" + df.format(( Math.round(( ((float)tocador.getTempo())/1000000))%3600) / 60) + ":" + df.format(( Math.round(( ((float)tocador.getTempo())/1000000))%3600) % 60));
+		if(progressBar.getValue() >= progressBar.getMaximum()){
+			parar();
+		}
 	}
 }
 
