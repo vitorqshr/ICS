@@ -3,6 +3,7 @@ package Trabalho1;
 import java.awt.EventQueue;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.*;
@@ -13,6 +14,7 @@ import java.text.DecimalFormat;
 
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.event.ChangeListener;
 
 public class GUI {
 	
@@ -34,6 +36,7 @@ public class GUI {
 	private String armTon;
 	private String duracao;
 	private String metro;
+	private String formCompass;
 	private enum Estado {
 		TOCANDO, PAUSADO, PARADO, INICIAL
 	}
@@ -74,17 +77,25 @@ public class GUI {
 	public int getVolume() {
 		return volume;
 	}
+	
+	public void setFormCompass(String formCompass) {
+		this.formCompass = formCompass;
+		lblFormCompass.setText("F\u00F3rmula do Compasso:   " + formCompass);
+	}
 
+	
 	public void setProgresso(int progresso) {
 		this.progresso = progresso;
 	}
 
 	public void setAndamento(int andamento) {
 		this.andamento = andamento;
+		lblAndamento.setText("Andamento:   " + andamento);
 	}
 
 	public void setArmTon(String armTon) {
 		this.armTon = armTon;
+		lblArmTon.setText("Armadura de Tonalidade:   " + armTon);
 	}
 
 	public void setDuracao(String duracao) {
@@ -94,6 +105,7 @@ public class GUI {
 
 	public void setMetro(String metro) {
 		this.metro = metro;
+		lblMetro.setText("Metro:   " + metro);
 	}
 
 	/**
@@ -199,6 +211,17 @@ public class GUI {
 		lblArmTon = new JLabel("Armadura de Tonalidade: ");
 		
 		sliderVolume = new JSlider();
+		sliderVolume.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				try {
+					tocador.mudaVolume(sliderVolume.getValue());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
+		
 		
 		JButton volBtn = new JButton("");
 		volBtn.addActionListener(new ActionListener() {
@@ -282,6 +305,7 @@ public class GUI {
 		DecimalFormat df = new DecimalFormat("00");
 		setDuracao( df.format( ( (int)tocador.getSegundos() ) / 360) + ":" + df.format(( ( (int)tocador.getSegundos())%360) / 60) + ":" + df.format(( ( (int)tocador.getSegundos())%360) % 60));
 		lblFileName.setText("Arquivo:   " + arquivoMidi.getName());
+	
 		progressBar.setStringPainted(true);
 		progressBar.setString("00:00:00");
 		progressBar.setMaximum((int)tocador.getSegundos());

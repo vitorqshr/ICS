@@ -202,28 +202,4 @@ public class Tocador {
 	      }
 	      return stonalidade;
 	    }
-<<<<<<< HEAD
-=======
-	    
-		public static void main(String[] args) {
-			try {
-				Tocador tocador = new Tocador("atrain");
-				long tempoini = System.currentTimeMillis();
-				long diftime = System.currentTimeMillis() - tempoini;
-				tocador.tocar();
-				while(diftime < 10000){
-					int volume = (int) (diftime/100);
-					System.out.println(volume);
-					tocador.mudaVolume(volume);
-					//tocador.tocar();
-					diftime = System.currentTimeMillis() - tempoini;
-				}
-				tocador.sair();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-		}
-
->>>>>>> origin/master
 }
