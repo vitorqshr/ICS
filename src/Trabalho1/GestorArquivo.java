@@ -62,7 +62,7 @@ public class GestorArquivo {
 		long microsegundos = sequencia.getMicrosecondLength();
 		long segundos = microsegundos/1000000;
 		long  tiques    = sequencia.getTickLength();
-		return segundos/tiques;
+		return (double)segundos/(double)tiques;
 	}
 	
 	public Receiver getReceptor(){

@@ -78,9 +78,8 @@ public class Tocador {
 	
 	
 	public void mudarPosicao(int horas, int minutos, int segundos){
-		double pos = ((horas*3600) + (minutos*60) + segundos)/(gestor.getDuracaoTique());
-		gestor.getSequenciador().setTickPosition((long) pos);
-		tocar();
+		double pos = ((double)((horas*3600) + (minutos*60) + segundos))/(gestor.getDuracaoTique());
+		gestor.getSequenciador().setTickPosition(Math.round(pos));
 	}
 	
 	public void atraso(int ms){
