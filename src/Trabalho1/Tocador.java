@@ -41,11 +41,7 @@ public class Tocador {
 		gestor.getSequenciador().stop();
 		gestor.getSequenciador().close();
 	}
-	
-	public void mudaPosicao(long posicao){
-		gestor.getSequenciador().setTickPosition(posicao);
-		tocar();
-	}
+
 	
 	public void mudaVolume(int volume) throws Exception{
 		
