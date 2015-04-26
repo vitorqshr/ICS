@@ -29,8 +29,8 @@ public class GestorArquivo {
 	}
 	
 	public long getSegundos(){
-		long microsegundos = sequencia.getMicrosecondLength();
-		return microsegundos/1000000;
+		float microsegundos = (float)sequencia.getMicrosecondLength();
+		return Math.round(microsegundos/1000000);
 	}
 	
 	public String getTempoTotal(){
