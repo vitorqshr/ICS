@@ -15,22 +15,12 @@ public class GestorArquivo {
 	private Sequencer sequenciador;
 	private Track[] trilhas;
 	
-	public GestorArquivo(String nome) throws Exception{
-		pegaSequencia(nome);
+	public GestorArquivo(File arquivoMidi) throws Exception{
+		pegaSequencia(arquivoMidi);
 	}
 	
-	public void escolherArquivo(String nome) throws Exception{
-		if(nome == null || nome.trim() == ""){
-			throw new RuntimeException("Erro ao abrir o arquivo!!");
-		}
-		caminhoArquivo = "./midis/";
-		caminhoArquivo = caminhoArquivo.concat(nome);
-		caminhoArquivo = caminhoArquivo.concat(".mid");
-		arquivo = new File(caminhoArquivo);
-	}
-	
-	public void pegaSequencia(String nome) throws Exception{
-		escolherArquivo(nome);
+	public void pegaSequencia(File arquivoMidi) throws Exception{
+		setArquivo(arquivoMidi);
 		sequencia = MidiSystem.getSequence(arquivo);
 		sequenciador = MidiSystem.getSequencer();
 		sequenciador.setSequence(sequencia);
@@ -89,5 +79,9 @@ public class GestorArquivo {
 	
 	public long getQntTrilhas(){
 		return trilhas.length;
+	}
+	
+	public void setArquivo(File arquivo){
+		this.arquivo = arquivo;
 	}
 }

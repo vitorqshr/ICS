@@ -7,6 +7,7 @@ import javax.sound.midi.Receiver;
 import javax.sound.midi.Sequencer;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
+import java.io.*;
 
 public class Tocador {
 	private Sequencer sequenciador;
@@ -16,19 +17,19 @@ public class Tocador {
 	static final int MENSAGEM_TONALIDADE = 0x59;  
 	 static final int FORMULA_DE_COMPASSO = 0x58;
 	
-	Tocador(String nome) throws Exception{
-		initGestor(nome);
+	Tocador(File arquivoMidi) throws Exception{
+		initGestor(arquivoMidi);
 	}
 	
-	public void mudaArquivo(String nome) throws Exception{
-		initGestor(nome);
+	public void mudaArquivo(File arquivoMidi) throws Exception{
+		initGestor(arquivoMidi);
 	}
 	
-	public void initGestor(String nome) throws Exception{
+	public void initGestor(File arquivoMidi) throws Exception{
 		if(gestor == null){
-			gestor = new GestorArquivo(nome);
+			gestor = new GestorArquivo(arquivoMidi);
 		}else{
-			gestor.pegaSequencia(nome);
+			gestor.pegaSequencia(arquivoMidi);
 		}
 	}
 	
@@ -201,6 +202,8 @@ public class Tocador {
 	      }
 	      return stonalidade;
 	    }
+<<<<<<< HEAD
+=======
 	    
 		public static void main(String[] args) {
 			try {
@@ -222,4 +225,5 @@ public class Tocador {
 			
 		}
 
+>>>>>>> origin/master
 }
