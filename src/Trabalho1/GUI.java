@@ -15,6 +15,8 @@ import java.text.DecimalFormat;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.event.ChangeListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class GUI {
 	
@@ -145,6 +147,29 @@ public class GUI {
 		mnAbrir.add(mntmArquivoMidi);
 		
 		progressBar = new JProgressBar();
+		progressBar.addMouseListener(new MouseAdapter() {
+			int pos, horas, minutos, segundos;
+			float mouseX, barWidth, dur;
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(estado != Estado.INICIAL){
+					mouseX = e.getX();
+					barWidth = progressBar.getWidth();
+					dur = tocador.getSegundos();
+					pos = Math.round ( (mouseX /barWidth) * dur);
+					//System.out.println("pos="+pos+" mousex="+mouseX+" barW="+barWidth+" dur="+dur);
+					horas = pos/3600;
+					minutos = (pos%3600)/60;
+					segundos = (pos%3600)%60;
+					tocador.mudarPosicao(horas, minutos, segundos);
+					//System.out.println("horas:"+horas+" minutos:"+minutos+" segundos:"+segundos);
+					atualizaProgresso();
+				}
+			}
+		});
+		
+		
 		
 		playBtn = new JButton("");
 		playBtn.addActionListener(new ActionListener() {
@@ -303,7 +328,7 @@ public class GUI {
 			e.printStackTrace();
 		}
 		DecimalFormat df = new DecimalFormat("00");
-		setDuracao( df.format( ( (int)tocador.getSegundos() ) / 360) + ":" + df.format(( ( (int)tocador.getSegundos())%360) / 60) + ":" + df.format(( ( (int)tocador.getSegundos())%360) % 60));
+		setDuracao( df.format( ( (int)tocador.getSegundos() ) / 3600) + ":" + df.format(( ( (int)tocador.getSegundos())%3600) / 60) + ":" + df.format(( ( (int)tocador.getSegundos())%3600) % 60));
 		lblFileName.setText("Arquivo:   " + arquivoMidi.getName());
 	
 		progressBar.setStringPainted(true);
@@ -315,14 +340,12 @@ public class GUI {
 	}
 	
 	public void tocar(){
+		estado = Estado.TOCANDO;
 		playBtn.setEnabled(false);
 		pauseBtn.setEnabled(true);
 		stopBtn.setEnabled(true);
-		
 		tocador.tocar();
-		
-		threadHandler();
-		estado = Estado.TOCANDO;
+		threadHandler();	
 	}
 	
 	public void pausar(){
@@ -343,33 +366,35 @@ public class GUI {
 		playBtn.setEnabled(true);
 		pauseBtn.setEnabled(false);
 		tocador.parar();
-		progressBar.setValue((int) (tocador.getTempo()/1000000));
-		DecimalFormat df = new DecimalFormat("00");
-		progressBar.setString(df.format( ( (int)tocador.getTempo()/1000000 ) / 360) + ":" + df.format(( ( (int)tocador.getTempo()/1000000)%360) / 60) + ":" + df.format(( ( (int)tocador.getTempo()/1000000)%360) % 60));
 		refresh.interrupt();
+		atualizaProgresso();
 	}
 	
 	public void threadHandler(){
 		refresh = new Thread(){
 			public void run(){
-					while(true){
+					while(estado == Estado.TOCANDO && !Thread.currentThread().isInterrupted()){
 						if(tocador.getTempo() * 1000000 == tocador.getSegundos()){
 							tocador.parar();
 						}
+						
+						atualizaProgresso();
+						
 						try {
 							Thread.sleep(1000);
 						} catch (InterruptedException e) {
 							Thread.currentThread().interrupt();
 						}
-						
-						
-						progressBar.setValue((int) (tocador.getTempo()/1000000));
-						DecimalFormat df = new DecimalFormat("00");
-						progressBar.setString(df.format( ( (int)tocador.getTempo()/1000000 ) / 360) + ":" + df.format(( ( (int)tocador.getTempo()/1000000)%360) / 60) + ":" + df.format(( ( (int)tocador.getTempo()/1000000)%360) % 60));
 					}
 			}
 		};
 		refresh.start();
+	}
+	
+	public void atualizaProgresso(){
+		progressBar.setValue((int) (tocador.getTempo()/1000000));
+		DecimalFormat df = new DecimalFormat("00");
+		progressBar.setString(df.format( Math.round(( ((float)tocador.getTempo())/1000000 ) / 3600)) + ":" + df.format(( Math.round(( ((float)tocador.getTempo())/1000000))%3600) / 60) + ":" + df.format(( Math.round(( ((float)tocador.getTempo())/1000000))%3600) % 60));
 	}
 }
 
