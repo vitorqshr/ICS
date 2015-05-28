@@ -31,12 +31,11 @@ import sintese.*;
 
 public class GUI {
 	
-	private Tocador tocador;
+	//private Tocador tocador;
 	private Thread refresh;
 	private JFrame frame;
 	private JProgressBar progressBar;
 	private JMenuBar menuBar;
-	private JMenu mnAbrir;
 	private JMenu mEscolherInstrumento;
 	private JMenuItem mntmArquivoMidi;
 	private JMenuItem mntmIstrumento1;
@@ -49,22 +48,13 @@ public class GUI {
 	private File arquivoMidi;
 	private int progresso;
 	private int volume;
-	private int andamento;
-	private String armTon;
-	private String duracao;
-	private String metro;
-	private String formCompass;
 	private enum Estado {
 		TOCANDO, PAUSADO, PARADO, INICIAL
 	}
 	Estado estado = Estado.INICIAL;
 	private JSlider sliderVolume;
-	private JLabel lblAndamento;
-	private JLabel lblFormCompass;
-	private JLabel lblMetro;
-	private JLabel lblArmTon;
-	private JLabel lblDuracao;
 	private int instrumentoSelecionado;
+	private Instrumento instrumento;
 	
 	/**
 	 * Inicia o programa.
@@ -95,35 +85,10 @@ public class GUI {
 	public int getVolume() {
 		return volume;
 	}
-	
-	public void setFormCompass(String formCompass) {
-		this.formCompass = formCompass;
-		lblFormCompass.setText("F\u00F3rmula do Compasso:   " + formCompass);
-	}
 
 	
 	public void setProgresso(int progresso) {
 		this.progresso = progresso;
-	}
-
-	public void setAndamento(int andamento) {
-		this.andamento = andamento;
-		lblAndamento.setText("Andamento:   " + andamento);
-	}
-
-	public void setArmTon(String armTon) {
-		this.armTon = armTon;
-		lblArmTon.setText("Armadura de Tonalidade:   " + armTon);
-	}
-
-	public void setDuracao(String duracao) {
-		this.duracao = duracao;
-		lblDuracao.setText("Dura\u00E7\u00E3o: " + duracao);
-	}
-
-	public void setMetro(String metro) {
-		this.metro = metro;
-		lblMetro.setText("Metro:   " + metro);
 	}
 
 	/**
@@ -159,7 +124,7 @@ public class GUI {
 				openMidi.setFileFilter(new FileNameExtensionFilter("Arquivo MIDI", "mid", "midi"));		
 				if(openMidi.showOpenDialog(openMidi) == JFileChooser.APPROVE_OPTION){
 					arquivoMidi = openMidi.getSelectedFile();
-					carregaMidi();
+					//carregaMidi();
 					estado = Estado.PARADO;
 				}
 			}
@@ -170,6 +135,7 @@ public class GUI {
 		mntmArquivoMidi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				instrumentoSelecionado = 1;
+				carregaInstrumento();
 			}
 		});
 		
@@ -179,6 +145,7 @@ public class GUI {
 		mntmArquivoMidi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				instrumentoSelecionado = 2;
+				carregaInstrumento();
 			}
 		});
 		
@@ -188,6 +155,7 @@ public class GUI {
 		mntmArquivoMidi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				instrumentoSelecionado = 3;
+				carregaInstrumento();
 			}
 		});
 		
@@ -203,13 +171,13 @@ public class GUI {
 				if(estado != Estado.INICIAL){
 					mouseX = e.getX();
 					barWidth = progressBar.getWidth();
-					dur = tocador.getSegundos();
-					pos = Math.round ( (mouseX /barWidth) * dur);
+					//dur = tocador.getSegundos();
+					//pos = Math.round ( (mouseX /barWidth) * dur);
 					//System.out.println("pos="+pos+" mousex="+mouseX+" barW="+barWidth+" dur="+dur);
-					horas = pos/3600;
-					minutos = (pos%3600)/60;
-					segundos = (pos%3600)%60;
-					tocador.mudarPosicao(horas, minutos, segundos);
+					//horas = pos/3600;
+					//minutos = (pos%3600)/60;
+					//segundos = (pos%3600)%60;
+					//tocador.mudarPosicao(horas, minutos, segundos);
 					//System.out.println("horas:"+horas+" minutos:"+minutos+" segundos:"+segundos);
 					atualizaProgresso();
 				}
@@ -270,23 +238,13 @@ public class GUI {
 		stopBtn.setEnabled(false);
 		
 		
-		lblFileName = new JLabel("Arquivo: ");
-		
-		lblDuracao = new JLabel("Dura\u00E7\u00E3o: ");
-		
-		lblFormCompass = new JLabel("F\u00F3rmula do Compasso: ");
-		
-		lblMetro = new JLabel("Metro: ");
-		
-		lblAndamento = new JLabel("Andamento: ");
-		
-		lblArmTon = new JLabel("Armadura de Tonalidade: ");
+		lblFileName = new JLabel("Instrumento: ");
 		
 		sliderVolume = new JSlider();
 		sliderVolume.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				try {
-					tocador.mudaVolume(sliderVolume.getValue());
+					//tocador.mudaVolume(sliderVolume.getValue());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -323,18 +281,7 @@ public class GUI {
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(sliderVolume, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addComponent(progressBar, GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE)
-						.addComponent(lblFileName)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblDuracao)
-								.addComponent(lblAndamento))
-							.addGap(113)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(lblFormCompass)
-									.addGap(125)
-									.addComponent(lblMetro))
-								.addComponent(lblArmTon))))
+						.addComponent(lblFileName))
 					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
@@ -342,15 +289,6 @@ public class GUI {
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(lblFileName)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblDuracao)
-						.addComponent(lblFormCompass)
-						.addComponent(lblMetro))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblAndamento)
-						.addComponent(lblArmTon))
 					.addPreferredGap(ComponentPlacement.RELATED, 211, Short.MAX_VALUE)
 					.addComponent(progressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
@@ -367,42 +305,13 @@ public class GUI {
 			
 	}
 	
-	public void carregaMidi (){
-		try {
-			tocador = new Tocador(this.getArquivoMidi());
-		} catch (Exception e) {
-			this.tocador.sair();
-			e.printStackTrace();
-		}
-		DecimalFormat df = new DecimalFormat("00");
-		setDuracao( df.format( ( (int)tocador.getSegundos() ) / 3600) + ":" + df.format(( ( (int)tocador.getSegundos())%3600) / 60) + ":" + df.format(( ( (int)tocador.getSegundos())%3600) % 60));
-		lblFileName.setText("Arquivo:   " + arquivoMidi.getName());
-	
-		progressBar.setStringPainted(true);
-		progressBar.setString("00:00:00");
-		progressBar.setMaximum((int)tocador.getSegundos());
-		playBtn.setEnabled(true);
-		pauseBtn.setEnabled(false);
-		stopBtn.setEnabled(false);
-		try {
-			tocador.mudaVolume(sliderVolume.getValue());
-			setArmTon(tocador.getGestor().getTonalidade());
-			Dimension d = tocador.getGestor().getFormulaDeCompasso();
-			setFormCompass((int)d.getWidth()+"/"+(int)d.getHeight()); 
-			setMetro("1/" + (int)d.getHeight());
-			setAndamento(tocador.getGestor().getAndamento());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
 	public void tocar(){
 		estado = Estado.TOCANDO;
 		playBtn.setEnabled(false);
 		pauseBtn.setEnabled(true);
 		stopBtn.setEnabled(true);
-		tocador.tocar();
-		threadHandler();	
+		instrumento.tocar();
+		//threadHandler();	
 	}
 	
 	public void pausar(){
@@ -412,7 +321,7 @@ public class GUI {
 		playBtn.setEnabled(true);
 		stopBtn.setEnabled(true);
 		
-		tocador.pausar();
+		//tocador.pausar();
 		refresh.interrupt();
 	}
 	
@@ -422,7 +331,7 @@ public class GUI {
 		stopBtn.setEnabled(false);
 		playBtn.setEnabled(true);
 		pauseBtn.setEnabled(false);
-		tocador.parar();
+		//tocador.parar();
 		refresh.interrupt();
 		atualizaProgresso();
 	}
@@ -431,11 +340,10 @@ public class GUI {
 		refresh = new Thread(){
 			public void run(){
 					while(estado == Estado.TOCANDO && !Thread.currentThread().isInterrupted()){
-						if(tocador.getTempo() * 1000000 == tocador.getSegundos()){
-							tocador.parar();
-						}
-						
-						atualizaProgresso();
+						//if(tocador.getTempo() * 1000000 == tocador.getSegundos()){
+						//	tocador.parar();
+						//}
+						//atualizaProgresso();
 						
 						try {
 							Thread.sleep(1000);
@@ -450,12 +358,27 @@ public class GUI {
 	
 	public void atualizaProgresso(){
 		
-		progressBar.setValue((int) (tocador.getTempo()/1000000));
+		//progressBar.setValue((int) (tocador.getTempo()/1000000));
 		DecimalFormat df = new DecimalFormat("00");
-		progressBar.setString(df.format( Math.round(( ((float)tocador.getTempo())/1000000 ) / 3600)) + ":" + df.format(( Math.round(( ((float)tocador.getTempo())/1000000))%3600) / 60) + ":" + df.format(( Math.round(( ((float)tocador.getTempo())/1000000))%3600) % 60));
+		//progressBar.setString(df.format( Math.round(( ((float)tocador.getTempo())/1000000 ) / 3600)) + ":" + df.format(( Math.round(( ((float)tocador.getTempo())/1000000))%3600) / 60) + ":" + df.format(( Math.round(( ((float)tocador.getTempo())/1000000))%3600) % 60));
 		if(progressBar.getValue() >= progressBar.getMaximum()){
 			parar();
 		}
+	}
+	
+	public void carregaInstrumento(){
+		try {
+			playBtn.setEnabled(true);
+			pauseBtn.setEnabled(false);
+			stopBtn.setEnabled(false);
+			lblFileName.setText("Instrumento: " + instrumentoSelecionado);
+			if (instrumentoSelecionado == 1) {
+				instrumento = new Instrumento1(1, 12f, 30f, 900f, 900f);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 }
 
