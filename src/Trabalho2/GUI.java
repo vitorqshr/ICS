@@ -116,24 +116,12 @@ public class GUI {
 		
 		mEscolherInstrumento = new JMenu("Escolher instrumento");
 		menuBar.add(mEscolherInstrumento);
-		
-		mntmArquivoMidi = new JMenuItem("Instrumento 1");
-		mntmArquivoMidi.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				final JFileChooser openMidi = new JFileChooser();
-				openMidi.setFileFilter(new FileNameExtensionFilter("Arquivo MIDI", "mid", "midi"));		
-				if(openMidi.showOpenDialog(openMidi) == JFileChooser.APPROVE_OPTION){
-					arquivoMidi = openMidi.getSelectedFile();
-					//carregaMidi();
-					estado = Estado.PARADO;
-				}
-			}
-		});
 		//mnAbrir.add(mntmArquivoMidi);
 		
 		mntmIstrumento1  = new JMenuItem("Instrumento 1");
-		mntmArquivoMidi.addActionListener(new ActionListener() {
+		mntmIstrumento1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("Carregou instrumento");
 				instrumentoSelecionado = 1;
 				carregaInstrumento();
 			}
@@ -142,8 +130,9 @@ public class GUI {
 		mEscolherInstrumento.add(mntmIstrumento1);
 		
 		mntmIstrumento2  = new JMenuItem("Instrumento 2");
-		mntmArquivoMidi.addActionListener(new ActionListener() {
+		mntmIstrumento2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("Carregou instrumento");
 				instrumentoSelecionado = 2;
 				carregaInstrumento();
 			}
@@ -152,8 +141,9 @@ public class GUI {
 		mEscolherInstrumento.add(mntmIstrumento2);
 		
 		mntmIstrumento3  = new JMenuItem("Instrumento 3");
-		mntmArquivoMidi.addActionListener(new ActionListener() {
+		mntmIstrumento3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("Carregou instrumento");
 				instrumentoSelecionado = 3;
 				carregaInstrumento();
 			}
