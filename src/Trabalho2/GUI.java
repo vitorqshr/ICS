@@ -365,6 +365,15 @@ public class GUI {
 			if (instrumentoSelecionado == 1) {
 				instrumento = new Instrumento1(1, 12f, 30f, 900f, 900f);
 			}
+			else if (instrumentoSelecionado == 2){
+				//Parametros: num(do tema), ganho(envoltoria)[P5], frequenciaEnv(frequencia da envoltoria)[P6], 
+				//frequenciaEnvOsc(frequencia da portadora)[P7], frequenciaRuido[P8], ganhoRuido[P9],
+				//Parametro opcional: valor(fator de andamento)
+				instrumento = new Instrumento2(1, 12f, 30f, 900f, 900f, 15f);
+			}
+			else if (instrumentoSelecionado == 3){
+				instrumento = new Instrumento3(1, 32f, 30f, 900f, 900f, 32f, 100f, 10f);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
