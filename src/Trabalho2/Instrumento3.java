@@ -17,13 +17,13 @@ public class Instrumento3 extends Instrumento {
 		criaInstrumento3(p5, p6, p7, p8, v1, p9, v2);
 	}
 	
-	public Instrumento3(int num,float p5, float p6, float p7, float p8, float v1, float p9, float v2,float valor) throws Exception{
-    	super(num, valor);
-    	criaInstrumento3(p5, p6, p7, p8, v1, p9, v2);
-    }
+//	public Instrumento3(int num,float p5, float p6, float p7, float p8, float v1, float p9, float v2,float valor) throws Exception{
+//    	super(num, valor);
+//    	criaInstrumento3(p5, p6, p7, p8, v1, p9, v2);
+//    }
 	
 	public void criaInstrumento3(float ganho, float frequenciaEnv, float frequenciaPortadora, float frequenciaOsc2 ,float ganhoOsc2, float frequenciaRuido, float ganhoRuido){
-		numIns = 1;
+		numIns = 3;
 		
         curva = new Curva(720);
         

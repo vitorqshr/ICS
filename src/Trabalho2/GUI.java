@@ -37,10 +37,18 @@ public class GUI {
 	private JProgressBar progressBar;
 	private JMenuBar menuBar;
 	private JMenu mEscolherInstrumento;
+	private JMenu mEscolherMelodia;
 	private JMenuItem mntmArquivoMidi;
 	private JMenuItem mntmIstrumento1;
 	private JMenuItem mntmIstrumento2;
 	private JMenuItem mntmIstrumento3;
+	private JMenuItem mMelodia1;
+	private JMenuItem mMelodia2;
+	private JMenuItem mMelodia3;
+	private JMenuItem mMelodia4;
+	private JMenuItem mMelodia5;
+	private JMenuItem mMelodia6;
+	private JMenuItem mMelodia7;
 	private JButton playBtn;
 	private JLabel lblFileName;
 	private JButton pauseBtn;
@@ -48,6 +56,7 @@ public class GUI {
 	private File arquivoMidi;
 	private int progresso;
 	private int volume;
+	private String nomeMelodia;
 	private enum Estado {
 		TOCANDO, PAUSADO, PARADO, INICIAL
 	}
@@ -55,6 +64,7 @@ public class GUI {
 	private JSlider sliderVolume;
 	private int instrumentoSelecionado;
 	private Instrumento instrumento;
+	private int melodiaSelecionada;
 	
 	/**
 	 * Inicia o programa.
@@ -103,6 +113,7 @@ public class GUI {
 	 */
 	private void initialize() {
 		instrumentoSelecionado = 0;
+		melodiaSelecionada = 0;
 		frame = new JFrame();
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(GUI.class.getResource("/Trabalho1/imagens/windowIcon.png")));
 		frame.setBounds(100, 100, 600, 400);
@@ -111,17 +122,14 @@ public class GUI {
 		menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
 		
-		//mnAbrir = new JMenu("Escolher instrumento");
-		//menuBar.add(mnAbrir);
+		
 		
 		mEscolherInstrumento = new JMenu("Escolher instrumento");
 		menuBar.add(mEscolherInstrumento);
-		//mnAbrir.add(mntmArquivoMidi);
 		
 		mntmIstrumento1  = new JMenuItem("Instrumento 1");
 		mntmIstrumento1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Carregou instrumento");
 				instrumentoSelecionado = 1;
 				carregaInstrumento();
 			}
@@ -132,7 +140,6 @@ public class GUI {
 		mntmIstrumento2  = new JMenuItem("Instrumento 2");
 		mntmIstrumento2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Carregou instrumento");
 				instrumentoSelecionado = 2;
 				carregaInstrumento();
 			}
@@ -143,36 +150,94 @@ public class GUI {
 		mntmIstrumento3  = new JMenuItem("Instrumento 3");
 		mntmIstrumento3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Carregou instrumento");
 				instrumentoSelecionado = 3;
 				carregaInstrumento();
 			}
 		});
 		
-		mEscolherInstrumento.add(mntmIstrumento3);
+		mEscolherInstrumento.add(mntmIstrumento3);		
 		
-		progressBar = new JProgressBar();
-		progressBar.addMouseListener(new MouseAdapter() {
-			int pos, horas, minutos, segundos;
-			float mouseX, barWidth, dur;
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if(estado != Estado.INICIAL){
-					mouseX = e.getX();
-					barWidth = progressBar.getWidth();
-					//dur = tocador.getSegundos();
-					//pos = Math.round ( (mouseX /barWidth) * dur);
-					//System.out.println("pos="+pos+" mousex="+mouseX+" barW="+barWidth+" dur="+dur);
-					//horas = pos/3600;
-					//minutos = (pos%3600)/60;
-					//segundos = (pos%3600)%60;
-					//tocador.mudarPosicao(horas, minutos, segundos);
-					//System.out.println("horas:"+horas+" minutos:"+minutos+" segundos:"+segundos);
-					atualizaProgresso();
-				}
+		mEscolherMelodia = new JMenu("Escolher melodia");
+		menuBar.add(mEscolherMelodia);
+		
+		mMelodia1  = new JMenuItem("drawing_quintet_flauta");
+		mMelodia1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				melodiaSelecionada = 1;
+				nomeMelodia = "drawing_quintet_flauta";
+				carregaInstrumento();
 			}
 		});
+		
+		mEscolherMelodia.add(mMelodia1);
+		
+		mMelodia2  = new JMenuItem("fuga");
+		mMelodia2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nomeMelodia = "fuga";
+				melodiaSelecionada = 2;
+				carregaInstrumento();
+			}
+		});
+		
+		mEscolherMelodia.add(mMelodia2);
+		
+		mMelodia3  = new JMenuItem("invencao14_direita");
+		mMelodia3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nomeMelodia = "invencao14_direita";
+				melodiaSelecionada = 3;
+				carregaInstrumento();
+			}
+		});
+		
+		mEscolherMelodia.add(mMelodia3);
+		
+		mMelodia4  = new JMenuItem("invencao4_direita");
+		mMelodia4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nomeMelodia = "invencao4_direita";
+				melodiaSelecionada = 4;
+				carregaInstrumento();
+			}
+		});
+		
+		mEscolherMelodia.add(mMelodia4);
+		
+		mMelodia5  = new JMenuItem("invencao4_esquerda");
+		mMelodia5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nomeMelodia = "invencao4_esquerda";
+				melodiaSelecionada = 5;
+				carregaInstrumento();
+			}
+		});
+		
+		mEscolherMelodia.add(mMelodia5);
+		
+		mMelodia6  = new JMenuItem("bwv988goldberg_v03_eq");
+		mMelodia6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nomeMelodia = "bwv988goldberg_v03_eq";
+				melodiaSelecionada = 6;
+				carregaInstrumento();
+			}
+		});
+		
+		mEscolherMelodia.add(mMelodia6);
+		
+		mMelodia7  = new JMenuItem("bwv988goldberg_v03_eq");
+		mMelodia7.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nomeMelodia = "bwv988goldberg_v03_eq";
+				melodiaSelecionada = 7;
+				carregaInstrumento();
+			}
+		});
+		
+		mEscolherMelodia.add(mMelodia7);
+		
+		
 		
 		
 		
@@ -191,58 +256,10 @@ public class GUI {
 		playBtn.setBorderPainted(false);
 		playBtn.setToolTipText("Reproduzir");
 		playBtn.setIcon(new ImageIcon(GUI.class.getResource("/Trabalho1/imagens/play.png")));
-		playBtn.setEnabled(false);
+		playBtn.setEnabled(false);		
 		
-		pauseBtn = new JButton("");
-		pauseBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(pauseBtn.isEnabled()){
-					pausar();
-				}
-			}
-		});
-		pauseBtn.setFocusPainted(false);
-		pauseBtn.setBorderPainted(false);
-		pauseBtn.setDisabledIcon(new ImageIcon(GUI.class.getResource("/Trabalho1/imagens/pauseOff.png")));
-		pauseBtn.setRolloverIcon(new ImageIcon(GUI.class.getResource("/Trabalho1/imagens/pauseRollOver.png")));
-		pauseBtn.setIcon(new ImageIcon(GUI.class.getResource("/Trabalho1/imagens/pause.png")));
-		pauseBtn.setToolTipText("Pausar");
-		pauseBtn.setContentAreaFilled(false);
-		pauseBtn.setBorder(null);
-		pauseBtn.setEnabled(false);
-		
-		stopBtn = new JButton("");
-		stopBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				parar();
-			}
-		});
-		stopBtn.setIcon(new ImageIcon(GUI.class.getResource("/Trabalho1/imagens/stop.png")));
-		stopBtn.setRolloverIcon(new ImageIcon(GUI.class.getResource("/Trabalho1/imagens/stopRollOver.png")));
-		stopBtn.setDisabledIcon(new ImageIcon(GUI.class.getResource("/Trabalho1/imagens/stopOff.png")));
-		stopBtn.setToolTipText("Parar");
-		stopBtn.setFocusPainted(false);
-		stopBtn.setContentAreaFilled(false);
-		stopBtn.setBorderPainted(false);
-		stopBtn.setBorder(null);
-		stopBtn.setEnabled(false);
-		
-		
-		lblFileName = new JLabel("Instrumento: ");
-		
-		sliderVolume = new JSlider();
-		sliderVolume.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
-				try {
-					//tocador.mudaVolume(sliderVolume.getValue());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		
-		
-		
+		lblFileName = new JLabel("Selecione o instrumento e a melodia");
+				
 		JButton volBtn = new JButton("");
 		volBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -261,16 +278,7 @@ public class GUI {
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(playBtn)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(pauseBtn, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(stopBtn, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 219, Short.MAX_VALUE)
-							.addComponent(volBtn)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(sliderVolume, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addComponent(progressBar, GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE)
+							.addComponent(playBtn))
 						.addComponent(lblFileName))
 					.addContainerGap())
 		);
@@ -279,16 +287,10 @@ public class GUI {
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(lblFileName)
-					.addPreferredGap(ComponentPlacement.RELATED, 211, Short.MAX_VALUE)
-					.addComponent(progressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addComponent(playBtn)
-							.addComponent(pauseBtn, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
-							.addComponent(stopBtn, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE))
-						.addComponent(sliderVolume, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(volBtn))
+							.addComponent(playBtn)))
 					.addContainerGap())
 		);
 		frame.getContentPane().setLayout(groupLayout);
@@ -298,42 +300,34 @@ public class GUI {
 	public void tocar(){
 		estado = Estado.TOCANDO;
 		playBtn.setEnabled(false);
-		pauseBtn.setEnabled(true);
-		stopBtn.setEnabled(true);
+		//pauseBtn.setEnabled(true);
+		//stopBtn.setEnabled(true);
 		instrumento.tocar();
 		//threadHandler();	
 	}
 	
-	public void pausar(){
-		estado = Estado.PAUSADO;
-		
-		pauseBtn.setEnabled(false);
-		playBtn.setEnabled(true);
-		stopBtn.setEnabled(true);
-		
-		//tocador.pausar();
-		refresh.interrupt();
-	}
-	
-	public void parar(){
-		estado = Estado.PARADO;
-		
-		stopBtn.setEnabled(false);
-		playBtn.setEnabled(true);
-		pauseBtn.setEnabled(false);
-		//tocador.parar();
-		refresh.interrupt();
-		atualizaProgresso();
-	}
+//	public void pausar(){
+//		estado = Estado.PAUSADO;
+//		
+//		pauseBtn.setEnabled(false);
+//		playBtn.setEnabled(true);
+//		stopBtn.setEnabled(true);
+//		refresh.interrupt();
+//	}
+//	
+//	public void parar(){
+//		estado = Estado.PARADO;
+//		
+//		stopBtn.setEnabled(false);
+//		playBtn.setEnabled(true);
+//		pauseBtn.setEnabled(false);
+//		refresh.interrupt();
+//	}
 	
 	public void threadHandler(){
 		refresh = new Thread(){
 			public void run(){
 					while(estado == Estado.TOCANDO && !Thread.currentThread().isInterrupted()){
-						//if(tocador.getTempo() * 1000000 == tocador.getSegundos()){
-						//	tocador.parar();
-						//}
-						//atualizaProgresso();
 						
 						try {
 							Thread.sleep(1000);
@@ -346,33 +340,34 @@ public class GUI {
 		refresh.start();
 	}
 	
-	public void atualizaProgresso(){
-		
-		//progressBar.setValue((int) (tocador.getTempo()/1000000));
-		DecimalFormat df = new DecimalFormat("00");
-		//progressBar.setString(df.format( Math.round(( ((float)tocador.getTempo())/1000000 ) / 3600)) + ":" + df.format(( Math.round(( ((float)tocador.getTempo())/1000000))%3600) / 60) + ":" + df.format(( Math.round(( ((float)tocador.getTempo())/1000000))%3600) % 60));
-		if(progressBar.getValue() >= progressBar.getMaximum()){
-			parar();
-		}
-	}
+//	public void atualizaProgresso(){
+//		DecimalFormat df = new DecimalFormat("00");
+//		if(progressBar.getValue() >= progressBar.getMaximum()){
+//			parar();
+//		}
+//	}
 	
 	public void carregaInstrumento(){
 		try {
-			playBtn.setEnabled(true);
-			pauseBtn.setEnabled(false);
-			stopBtn.setEnabled(false);
-			lblFileName.setText("Instrumento: " + instrumentoSelecionado);
-			if (instrumentoSelecionado == 1) {
-				instrumento = new Instrumento1(1, 12f, 30f, 900f, 900f);
-			}
-			else if (instrumentoSelecionado == 2){
-				//Parametros: num(do tema), ganho(envoltoria)[P5], frequenciaEnv(frequencia da envoltoria)[P6], 
-				//frequenciaEnvOsc(frequencia da portadora)[P7], frequenciaRuido[P8], ganhoRuido[P9],
-				//Parametro opcional: valor(fator de andamento)
-				instrumento = new Instrumento2(1, 12f, 30f, 900f, 900f, 15f);
-			}
-			else if (instrumentoSelecionado == 3){
-				instrumento = new Instrumento3(1, 32f, 30f, 900f, 900f, 32f, 100f, 10f);
+			if(instrumentoSelecionado > 0 && melodiaSelecionada > 0){
+				playBtn.setEnabled(true);
+				lblFileName.setText("Instrumento: " + instrumentoSelecionado  +  "  Melodia: " + nomeMelodia);
+				if (instrumentoSelecionado == 1) {
+					instrumento = new Instrumento1(melodiaSelecionada, 12f, 30f, 900f, 900f);
+				}
+				else if (instrumentoSelecionado == 2){
+					//Parametros: num(do tema), ganho(envoltoria)[P5], frequenciaEnv(frequencia da envoltoria)[P6], 
+					//frequenciaEnvOsc(frequencia da portadora)[P7], frequenciaRuido[P8], ganhoRuido[P9],
+					//Parametro opcional: valor(fator de andamento)
+					instrumento = new Instrumento2(melodiaSelecionada, 12f, 30f, 900f, 900f, 15f);
+				}
+				else if (instrumentoSelecionado == 3){
+					instrumento = new Instrumento3(melodiaSelecionada, 32f, 30f, 900f, 900f, 32f, 100f, 10f);
+				}
+			}else if(instrumentoSelecionado > 0){
+				lblFileName.setText("Selecione a melodia");
+			}else if(melodiaSelecionada>0){
+				lblFileName.setText("Selecione o instrumento");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -12,10 +12,10 @@ public class Instrumento1 extends Instrumento{
 		criaInstrumento1(ganho, frequenciaEnv, frequenciaRuido, frequenciaEnvOsc);
 	}
 	
-	public Instrumento1(int num,float ganho, float frequenciaEnv, float frequenciaRuido, float frequenciaEnvOsc,float valor) throws Exception{
-    	super(num, valor);
-    	criaInstrumento1(ganho, frequenciaEnv, frequenciaRuido, frequenciaEnvOsc);
-    }
+//	public Instrumento1(int num,float ganho, float frequenciaEnv, float frequenciaRuido, float frequenciaEnvOsc,float valor) throws Exception{
+//    	super(num, valor);
+//    	criaInstrumento1(ganho, frequenciaEnv, frequenciaRuido, frequenciaEnvOsc);
+//    }
 	
 	public void criaInstrumento1(float ganho, float frequenciaEnv, float frequenciaRuido, float frequenciaEnvOsc){
 		numIns = 1;

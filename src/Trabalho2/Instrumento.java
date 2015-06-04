@@ -1,5 +1,8 @@
 package Trabalho2;
 
+import java.util.LinkedHashMap;
+
+import jdk.internal.org.objectweb.asm.tree.IntInsnNode;
 import sintese.Curva;
 import sintese.Envoltoria;
 import sintese.Melodia;
@@ -18,13 +21,11 @@ public class Instrumento {
     Tema tema;
     Som som;
     int numIns;
+    private LinkedHashMap<Integer, Melodia> melodias;
     
     public Instrumento(int num) throws Exception{
+    	populaMelodias();
     	escolheMelodia(num);
-    }
-    
-    public Instrumento(int num,float valor) throws Exception{
-    	escolheMelodia(num, valor);
     }
     
     public void initTema(){
@@ -35,44 +36,10 @@ public class Instrumento {
     
     public void escolheMelodia(int num) throws Exception{
     	initTema();
-    	if(num == 1){
-            melodia = tema.tema_aa_drawing_quintet_flauta();
-    	}else if(num == 2){
-            melodia = tema.tema_aa_fuga1();
-    	}else if(num == 3){
-            melodia = tema.tema_bwv775_invencao14_direita();
-    	}else if(num == 4){
-            melodia = tema.tema_bwv775_invencao4_direita();
-    	}else if(num == 5){
-            melodia = tema.tema_bwv775_invencao4_esquerda();
-    	}else if(num == 6){
-            melodia = tema.tema_bwv988goldberg_v03_eq();
-    	}else if(num == 7){
-            melodia = tema.tema_duda_no_frevo_eq();
-    	}else{
+    	if(num<1 || num>7){
     		throw new Exception("Melodia invalida!");
     	}
-    }
-    
-    public void escolheMelodia(int num,float valor) throws Exception{
-    	initTema();
-    	if(num == 1){
-            melodia = tema.tema_aa_drawing_quintet_flauta(valor);
-    	}else if(num == 2){
-            melodia = tema.tema_aa_fuga1(valor);
-    	}else if(num == 3){
-            melodia = tema.tema_bwv775_invencao14_direita(valor);
-    	}else if(num == 4){
-            melodia = tema.tema_bwv775_invencao4_direita(valor);
-    	}else if(num == 5){
-            melodia = tema.tema_bwv775_invencao4_esquerda(valor);
-    	}else if(num == 6){
-            melodia = tema.tema_bwv988goldberg_v03_eq(valor);
-    	}else if(num == 7){
-            melodia = tema.tema_duda_no_frevo_eq(valor);
-    	}else{
-    		throw new Exception("Melodia invalida!");
-    	}
+    	melodia = melodias.get(num);
     }
     
     public Nota[] getNotas() {
@@ -92,6 +59,19 @@ public class Instrumento {
         som.salvawave("Instrumento" + numIns + ".wav");
         som.tocawave();
         som.visualiza();
+    }
+    
+    private void populaMelodias(){
+    	melodias = new LinkedHashMap<Integer, Melodia>();
+    	initTema();
+    	melodias.put(1, tema.tema_aa_drawing_quintet_flauta());
+    	melodias.put(2, tema.tema_aa_fuga1());
+    	melodias.put(3, tema.tema_bwv775_invencao14_direita());
+    	melodias.put(4, tema.tema_bwv775_invencao4_direita());
+    	melodias.put(5, tema.tema_bwv775_invencao4_esquerda());
+    	melodias.put(6, tema.tema_bwv988goldberg_v03_eq());
+    	melodias.put(7, tema.tema_bwv988goldberg_v03_eq());    	
+    	
     }
     
 }
