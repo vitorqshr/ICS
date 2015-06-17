@@ -300,53 +300,13 @@ public class GUI {
 	public void tocar(){
 		estado = Estado.TOCANDO;
 		playBtn.setEnabled(false);
-		//pauseBtn.setEnabled(true);
-		//stopBtn.setEnabled(true);
 		instrumento.tocar();
-		//threadHandler();	
 	}
 	
-//	public void pausar(){
-//		estado = Estado.PAUSADO;
-//		
-//		pauseBtn.setEnabled(false);
-//		playBtn.setEnabled(true);
-//		stopBtn.setEnabled(true);
-//		refresh.interrupt();
-//	}
-//	
-//	public void parar(){
-//		estado = Estado.PARADO;
-//		
-//		stopBtn.setEnabled(false);
-//		playBtn.setEnabled(true);
-//		pauseBtn.setEnabled(false);
-//		refresh.interrupt();
-//	}
 	
-	public void threadHandler(){
-		refresh = new Thread(){
-			public void run(){
-					while(estado == Estado.TOCANDO && !Thread.currentThread().isInterrupted()){
-						
-						try {
-							Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							Thread.currentThread().interrupt();
-						}
-					}
-			}
-		};
-		refresh.start();
-	}
-	
-//	public void atualizaProgresso(){
-//		DecimalFormat df = new DecimalFormat("00");
-//		if(progressBar.getValue() >= progressBar.getMaximum()){
-//			parar();
-//		}
-//	}
-	
+	//Parametros: num(do tema), ganho(envoltoria)[P5], frequenciaEnv(frequencia da envoltoria)[P6], 
+	//frequenciaEnvOsc(frequencia da portadora)[P7], frequenciaRuido[P8], ganhoRuido[P9],
+	//Parametro opcional: valor(fator de andamento)
 	public void carregaInstrumento(){
 		try {
 			if(instrumentoSelecionado > 0 && melodiaSelecionada > 0){
@@ -356,9 +316,6 @@ public class GUI {
 					instrumento = new Instrumento1(melodiaSelecionada, 12f, 30f, 900f, 900f);
 				}
 				else if (instrumentoSelecionado == 2){
-					//Parametros: num(do tema), ganho(envoltoria)[P5], frequenciaEnv(frequencia da envoltoria)[P6], 
-					//frequenciaEnvOsc(frequencia da portadora)[P7], frequenciaRuido[P8], ganhoRuido[P9],
-					//Parametro opcional: valor(fator de andamento)
 					instrumento = new Instrumento2(melodiaSelecionada, 12f, 30f, 900f, 900f, 15f);
 				}
 				else if (instrumentoSelecionado == 3){
