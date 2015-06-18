@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.text.DecimalFormat;
 
 import javax.swing.GroupLayout;
@@ -26,10 +27,9 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.JTextPane;
 
 public class GUI {
-	
-	private Tocador tocador;
 	private Thread refresh;
 	private JFrame frame;
 	private JMenuBar menuBar;
@@ -44,6 +44,7 @@ public class GUI {
 	private String duracao;
 	private String metro;
 	private String formCompass;
+	private Conversor conversor;
 	private enum Estado {
 		TOCANDO, PAUSADO, PARADO, INICIAL
 	}
@@ -53,6 +54,8 @@ public class GUI {
 	private JLabel lblMetro;
 	private JLabel lblArmTon;
 	private JLabel lblDuracao;
+	private JButton btnGerar;
+	private JTextPane textPane;
 	
 	/**
 	 * Inicia o programa.
@@ -163,7 +166,18 @@ public class GUI {
 		
 		lblArmTon = new JLabel("Armadura de Tonalidade: ");
 		
-		JButton btnGerar = new JButton("Gerar");
+		btnGerar = new JButton("Gerar");
+		btnGerar.setEnabled(false);
+		
+		btnGerar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(btnGerar.isEnabled()){
+					gerar();
+				}
+			}
+		});
+		
+		textPane = new JTextPane();
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -182,12 +196,13 @@ public class GUI {
 									.addGap(125)
 									.addComponent(lblMetro))
 								.addComponent(lblArmTon)))
-						.addComponent(btnGerar))
-					.addContainerGap(127, Short.MAX_VALUE))
+						.addComponent(btnGerar)
+						.addComponent(textPane, GroupLayout.PREFERRED_SIZE, 549, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(25, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(lblFileName)
 					.addPreferredGap(ComponentPlacement.RELATED)
@@ -201,64 +216,50 @@ public class GUI {
 						.addComponent(lblArmTon))
 					.addGap(36)
 					.addComponent(btnGerar)
-					.addContainerGap(216, Short.MAX_VALUE))
+					.addGap(18)
+					.addComponent(textPane, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(25, Short.MAX_VALUE))
 		);
 		frame.getContentPane().setLayout(groupLayout);
 			
 	}
 	
+	
+	private void gerar(){
+		try {
+			String info = conversor.converter();
+			textPane.setText(info);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public void carregaMidi (){
 		try {
-			tocador = new Tocador(this.getArquivoMidi());
+			conversor = new Conversor(arquivoMidi);
+			btnGerar.setEnabled(true);
 		} catch (Exception e) {
-			this.tocador.sair();
 			e.printStackTrace();
 		}
 		DecimalFormat df = new DecimalFormat("00");
-		setDuracao( df.format( ( (int)tocador.getSegundos() ) / 3600) + ":" + df.format(( ( (int)tocador.getSegundos())%3600) / 60) + ":" + df.format(( ( (int)tocador.getSegundos())%3600) % 60));
+		setDuracao( df.format( ( (int)conversor.getSegundos() ) / 3600) + ":" + df.format(( ( (int)conversor.getSegundos())%3600) / 60) + ":" + df.format(( ( (int)conversor.getSegundos())%3600) % 60));
 		lblFileName.setText("Arquivo:   " + arquivoMidi.getName());
 	
 		try {
-			setArmTon(tocador.getGestor().getTonalidade());
-			Dimension d = tocador.getGestor().getFormulaDeCompasso();
+			//setArmTon(conversor.getGestor().getTonalidade());
+			Dimension d = conversor.getGestor().getFormulaDeCompasso();
 			setFormCompass((int)d.getWidth()+"/"+(int)d.getHeight()); 
 			setMetro("1/" + (int)d.getHeight());
-			setAndamento(tocador.getGestor().getAndamento());
+			setAndamento(conversor.getGestor().getAndamento());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public void tocar(){
-		estado = Estado.TOCANDO;
-		tocador.tocar();
-		threadHandler();	
-	}
-	
-	public void pausar(){
-		estado = Estado.PAUSADO;
-		
-		tocador.pausar();
-		refresh.interrupt();
-	}
-	
-	public void parar(){
-		estado = Estado.PARADO;
-		tocador.parar();
-		refresh.interrupt();
-		atualizaProgresso();
 	}
 	
 	public void threadHandler(){
 		refresh = new Thread(){
 			public void run(){
 					while(estado == Estado.TOCANDO && !Thread.currentThread().isInterrupted()){
-						if(tocador.getTempo() * 1000000 == tocador.getSegundos()){
-							tocador.parar();
-						}
-						
-						atualizaProgresso();
-						
 						try {
 							Thread.sleep(1000);
 						} catch (InterruptedException e) {
@@ -268,9 +269,6 @@ public class GUI {
 			}
 		};
 		refresh.start();
-	}
-	
-	public void atualizaProgresso(){
 	}
 }
 

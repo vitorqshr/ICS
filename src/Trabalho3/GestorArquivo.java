@@ -16,7 +16,7 @@ public class GestorArquivo {
 	private File arquivo;
 	private Sequence sequencia;
 	private Sequencer sequenciador;
-	private Track[] trilhas;
+	public Track[] trilhas;
 	static final int MENSAGEM_TONALIDADE = 0x59;  
 	static final int FORMULA_DE_COMPASSO = 0x58;
 	
