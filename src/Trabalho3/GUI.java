@@ -28,6 +28,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JTextPane;
+import javax.swing.JTextArea;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 
 public class GUI {
 	private Thread refresh;
@@ -55,7 +58,7 @@ public class GUI {
 	private JLabel lblArmTon;
 	private JLabel lblDuracao;
 	private JButton btnGerar;
-	private JTextPane textPane;
+	private JTextArea textArea;
 	
 	/**
 	 * Inicia o programa.
@@ -177,13 +180,14 @@ public class GUI {
 			}
 		});
 		
-		textPane = new JTextPane();
+		JScrollPane scrollPane = new JScrollPane();
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE)
 						.addComponent(lblFileName)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
@@ -196,9 +200,8 @@ public class GUI {
 									.addGap(125)
 									.addComponent(lblMetro))
 								.addComponent(lblArmTon)))
-						.addComponent(btnGerar)
-						.addComponent(textPane, GroupLayout.PREFERRED_SIZE, 549, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(25, Short.MAX_VALUE))
+						.addComponent(btnGerar))
+					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -216,10 +219,13 @@ public class GUI {
 						.addComponent(lblArmTon))
 					.addGap(36)
 					.addComponent(btnGerar)
-					.addGap(18)
-					.addComponent(textPane, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(25, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+					.addContainerGap())
 		);
+		
+		textArea = new JTextArea();
+		scrollPane.setViewportView(textArea);
 		frame.getContentPane().setLayout(groupLayout);
 			
 	}
@@ -228,7 +234,7 @@ public class GUI {
 	private void gerar(){
 		try {
 			String info = conversor.converter();
-			textPane.setText(info);
+			textArea.setText(info);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
