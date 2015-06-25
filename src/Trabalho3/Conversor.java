@@ -141,6 +141,7 @@ public class Conversor {
                                      break;
                                  }
                              }
+                             duracao = (double) (proximo.getTick() - evento.getTick() + decadencia )*gestor.getDuracaoTique();
                     	 }else{
                     		 duracao = (gestor.getSequencia().getTickLength() - evento.getTick())*gestor.getDuracaoTique();
                     	 }
@@ -150,7 +151,7 @@ public class Conversor {
                      // Amplitude da nota
                      int amp = (int) dados[2];
                      
-                     if (duracao != 0) {
+                     if (duracao >0) {
                          pw.println("\t\tins" + numInstrumentos + ".addNota(" + duracao + ", " + freq + ", " + amp + ");");
                          pw.flush();
                      }
