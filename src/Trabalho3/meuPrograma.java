@@ -1,6 +1,7 @@
 package Trabalho3;
 
-import sintese.*;
+import sintese.Polifonia;
+import sintese.Som;
 
 public class meuPrograma  {
 

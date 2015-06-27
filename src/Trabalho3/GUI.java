@@ -132,7 +132,7 @@ public class GUI {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(GUI.class.getResource("/Trabalho1/imagens/windowIcon.png")));
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(GUI.class.getResource("/Trabalho3/imagens/windowIcon.png")));
 		frame.setBounds(100, 100, 600, 400);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -236,7 +236,6 @@ public class GUI {
 			String info = conversor.converter();
 			textArea.setText(info);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -248,11 +247,10 @@ public class GUI {
 			e.printStackTrace();
 		}
 		DecimalFormat df = new DecimalFormat("00");
-		setDuracao( df.format( ( (int)conversor.getSegundos() ) / 3600) + ":" + df.format(( ( (int)conversor.getSegundos())%3600) / 60) + ":" + df.format(( ( (int)conversor.getSegundos())%3600) % 60));
 		lblFileName.setText("Arquivo:   " + arquivoMidi.getName());
 	
 		try {
-			//setArmTon(conversor.getGestor().getTonalidade());
+			setArmTon(conversor.getGestor().getTonalidade());
 			Dimension d = conversor.getGestor().getFormulaDeCompasso();
 			setFormCompass((int)d.getWidth()+"/"+(int)d.getHeight()); 
 			setMetro("1/" + (int)d.getHeight());
@@ -260,21 +258,6 @@ public class GUI {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public void threadHandler(){
-		refresh = new Thread(){
-			public void run(){
-					while(estado == Estado.TOCANDO && !Thread.currentThread().isInterrupted()){
-						try {
-							Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							Thread.currentThread().interrupt();
-						}
-					}
-			}
-		};
-		refresh.start();
 	}
 }
 

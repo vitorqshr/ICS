@@ -1,5 +1,6 @@
 package Trabalho3;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import sintese.InstrumentoAditivo;
@@ -16,6 +17,11 @@ public class Instrumento {
     
     public Instrumento(){
 
+    }
+    
+    public void initNota(){
+    	if(nota == null)
+    		nota = new ArrayList<Nota>();
     }
     
     public void setFrequencia (float freq) {

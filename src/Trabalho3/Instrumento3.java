@@ -21,7 +21,7 @@ public class Instrumento3 extends Instrumento {
 	}
 	
 	public void criaInstrumento3(){
-		nota = new ArrayList<>();
+		initNota();
         
         curva1 = new Curva(720);
         curva1.addPonto(0f, 0f);

@@ -27,61 +27,7 @@ public class Conversor {
 			gestor.pegaSequencia(arquivoMidi);
 		}
 	}
-	
-	public void tocar(){
-		gestor.getSequenciador().start();
-	}
-	public void pausar(){
-		gestor.getSequenciador().stop();
-	}
-	
-	public void parar(){
-		gestor.getSequenciador().stop();
-		gestor.getSequenciador().setMicrosecondPosition(0);
-	}
-	
-	public void sair(){
-		gestor.getSequenciador().stop();
-		gestor.getSequenciador().close();
-	}
 
-	
-	public void mudaVolume(int volume) throws Exception{
-		
-		volume = (int)volume*127/100;
-		ShortMessage volumeMesage = new ShortMessage();
-		for (int i = 0; i < 16; i++) {
-			volumeMesage.setMessage(ShortMessage.CONTROL_CHANGE,i,7,volume);
-			gestor.getReceptor().send(volumeMesage, -1);
-		}
-	}
-	
-	public long getTempo(){
-		if(gestor.getSequenciador() == null){
-			return -1;
-		}
-		return gestor.getSequenciador().getMicrosecondPosition();
-	}
-	
-	public long getSegundos(){
-		return gestor.getSegundos();
-	}
-	
-	
-	public void mudarPosicao(int horas, int minutos, int segundos){
-		long pos = ((horas*3600) + (minutos*60) + segundos)*1000000;
-		gestor.getSequenciador().setMicrosecondPosition(pos);
-	}
-	
-	public void atraso(int ms){
-		try {
-			Thread.sleep(ms);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
 	public GestorArquivo getGestor(){
 		return gestor;
 	}
@@ -212,23 +158,16 @@ public class Conversor {
 	        }
 	        
 	        pw.println("\n\t\tSom s = p.getSom();\n" +
-	                  //"\t\ts.salvawave(\"" + arquivo + ".wav\");\n" +
-	                  //"\t\ts.tocawave(\"" + arquivo + ".wav\");\n"
 	                  "\t\ts.visualiza();\n"
 	                );
 	        pw.flush();
 	        
-	        // Fecha a classe e a main
 	        pw.print("\t}\n" +
 	            "}"
 	        );
 	        pw.flush();
 	        
 	        System.out.println("\n\nTerminado\n");
-//	        informacoes += "\n\nInstrumentos de 0 ate 31 foram substituidos por Ins1.\n" +
-//                    "Instrumentos de 32 ate 63 foram substituidos por Ins2.\n" +
-//                    "Instrumentos de 64 ate 95 foram substituidos por Ins3.\n" +
-//                    "Instrumentos de 96 ate 127 foram substituidos por Ins4.\n";
 	        informacoes += "\n\nInstrumentos de 0 ate 42 foram substituidos por Instrumento1.\n" +
 	        		"Instrumentos de 43 ate 85 foram substituidos por Instrumento2.\n" +
                     "Instrumentos de 86 ate 127 foram substituidos por Instrumento3.\n" ;
